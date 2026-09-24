@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Level- &amp; VorQ Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nosifer&family=Anton&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0808; --bg2:#150a0a; --panel:#1c0d0d;
+  --red:#e21b1b; --red-dim:#7a0f0f; --red-bright:#ff3b3b;
+  --amber:#ff8a3d;
+  --ink:#f1e9e4; --muted:#9c8880; --line:#3a1414;
+  --note:#180a0a;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box}
+html{scroll-padding-top:64px}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased;}
+::selection{background:var(--red-dim);color:#fff}
+
+header.hero{
+  padding:44px 20px 30px;
+  text-align:center;
+  background:
+    radial-gradient(ellipse at top,#3a0a0a 0%,var(--bg) 65%);
+  border-bottom:3px solid var(--red-dim);
+  position:relative;
+  overflow:hidden;
+}
+header.hero::after{
+  content:"";
+  position:absolute; left:0; right:0; bottom:-3px; height:6px;
+  background:repeating-linear-gradient(115deg, var(--red) 0 10px, transparent 10px 20px);
+  opacity:.6;
+}
+header.hero h1{
+  font-family:'Nosifer',cursive;
+  font-weight:400;
+  font-size:clamp(1.7rem,5.5vw,3.1rem);
+  margin:0 0 14px;
+  color:var(--red-bright);
+  text-shadow:0 0 18px rgba(226,27,27,.55), 0 3px 0 #4a0000;
+  letter-spacing:.01em;
+  line-height:1.15;
+}
+header.hero p{margin:0;color:var(--muted);font-size:.95rem;max-width:520px;margin-inline:auto;line-height:1.5}
+
+.tabs{
+  display:flex; justify-content:center; gap:8px; flex-wrap:wrap;
+  padding:16px 16px 0; background:var(--bg);
+}
+.tabs button{
+  background:transparent; border:1px solid var(--line); color:var(--muted);
+  padding:9px 18px; border-radius:4px 4px 0 0; cursor:pointer;
+  font-family:'Anton',sans-serif; letter-spacing:.03em; font-size:.9rem;
+}
+.tabs button.active{color:var(--red-bright); border-color:var(--red-dim); border-bottom-color:var(--bg); background:#140909}
+.view[hidden]{display:none}
+
+.section-intro{color:var(--muted); font-size:.85rem; max-width:640px; margin:0 0 14px; line-height:1.5}
+
+.controls{
+  position:sticky; top:0; z-index:20;
+  background:rgba(10,8,8,.96);
+  backdrop-filter:blur(6px);
+  border-bottom:1px solid var(--red-dim);
+  padding:12px 16px;
+  display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+  padding-top:calc(12px + env(safe-area-inset-top,0px));
+}
+.controls input{
+  flex:1 1 200px; min-width:0;
+  background:var(--panel); border:1px solid var(--line); color:var(--ink);
+  padding:9px 12px; border-radius:4px; font-size:.92rem;
+}
+.controls input:focus{outline:2px solid var(--red); outline-offset:1px}
+.controls .jump{display:flex; gap:6px; flex-wrap:wrap}
+.controls .jump button{
+  background:transparent; border:1px solid var(--line); color:var(--muted);
+  padding:8px 11px; border-radius:4px; font-size:.82rem; cursor:pointer;
+  font-family:'Anton',sans-serif; letter-spacing:.02em;
+}
+.controls .jump button:hover, .controls .jump button:focus-visible{border-color:var(--red); color:var(--red-bright)}
+.controls .count{color:var(--muted); font-size:.8rem; white-space:nowrap}
+
+main{max-width:1180px; margin:0 auto; padding:18px 12px 60px}
+
+.scroller{overflow-x:auto; border:1px solid var(--line); border-radius:8px}
+table{width:100%; border-collapse:collapse; min-width:920px; font-size:.88rem}
+thead th{
+  position:sticky; top:0; z-index:5;
+  background:#160a0a; color:var(--red-bright);
+  text-align:left; font-weight:400; font-size:.8rem;
+  font-family:'Anton',sans-serif; letter-spacing:.03em;
+  padding:10px 12px; border-bottom:2px solid var(--red-dim);
+  white-space:nowrap;
+}
+tbody tr{border-bottom:1px solid var(--line)}
+tbody tr.data.grouped{border-bottom:1px solid #1a0d0d}
+tbody tr.data:hover{background:#1c0d0d}
+tbody td{padding:10px 12px; vertical-align:top; color:var(--ink)}
+td.farmcell{vertical-align:top; padding-top:14px; background:#140a0a; border-left:3px solid var(--red-dim)}
+td.lvl{font-family:'Anton',sans-serif; color:var(--red-bright); font-weight:400; font-size:1.15rem; white-space:nowrap; letter-spacing:.02em}
+td.ep{color:var(--muted); white-space:nowrap; font-variant-numeric:tabular-nums}
+td.pct{white-space:nowrap; font-variant-numeric:tabular-nums}
+td.time{white-space:nowrap; color:var(--muted)}
+.tag{display:inline-block; background:#2a0f0f; color:var(--amber); border:1px solid #5a1e1e; border-radius:4px; padding:2px 7px; font-size:.76rem; margin-bottom:3px}
+.alt{color:var(--muted); font-size:.82rem; display:block; margin-top:3px}
+.note-inline{color:var(--muted); font-style:italic; font-size:.82rem; display:block; margin-top:3px}
+
+details.vq{margin-top:4px}
+details.vq summary{
+  cursor:pointer; color:var(--red-bright); font-size:.74rem; font-weight:600;
+  list-style:none; display:inline-flex; align-items:center; gap:4px;
+  padding:2px 6px; border:1px solid var(--red-dim); border-radius:4px; background:#170a0a;
+}
+details.vq summary::-webkit-details-marker{display:none}
+details.vq summary::before{content:"▸"; font-size:.7rem}
+details.vq[open] summary::before{content:"▾"}
+details.vq ol{margin:6px 0 2px; padding-left:18px; font-size:.8rem; color:var(--ink); line-height:1.5}
+details.vq ol li.vq-header{
+  list-style:none; margin:8px 0 2px -18px; color:var(--red-bright);
+  font-weight:600; font-size:.74rem; border-top:1px solid var(--line); padding-top:6px;
+}
+
+tr.banner td{
+  background:var(--note); color:var(--ink); font-style:italic; font-size:.86rem;
+  padding:11px 14px; border-left:3px solid var(--red);
+}
+tr.hidden{display:none}
+
+.legend{display:flex; gap:16px; flex-wrap:wrap; color:var(--muted); font-size:.78rem; margin:14px 4px 0}
+.legend span{display:flex; align-items:center; gap:6px}
+.dot{width:9px; height:9px; border-radius:2px; display:inline-block}
+
+footer{text-align:center; color:var(--muted); font-size:.78rem; padding:20px; border-top:1px solid var(--line)}
+
+@media (max-width:600px){
+  .controls{flex-direction:column; align-items:stretch}
+  .controls .jump{overflow-x:auto; flex-wrap:nowrap; padding-bottom:2px}
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <h1>Level- &amp; VorQ Guide</h1>
+  <p>Levelweg von 38 bis 140 &mdash; Grind-Spots, Vor-Quests und Alternativrouten auf einen Blick.</p>
+</header>
+
+<nav class="tabs">
+  <button class="tab-btn active" data-target="view-level">Levelweg</button>
+  <button class="tab-btn" data-target="view-wdh">Wdh-Annahme</button>
+</nav>
+
+<section id="view-level" class="view">
+<div class="controls">
+  <input id="search" type="text" placeholder="Level, Mob, Quest oder Ort suchen…" aria-label="Tabelle durchsuchen">
+  <div class="jump">
+    <button data-lvl="38">38+</button>
+    <button data-lvl="52">52+</button>
+    <button data-lvl="61">61+</button>
+    <button data-lvl="79">79+</button>
+    <button data-lvl="90">90+</button>
+    <button data-lvl="105">105+</button>
+    <button data-lvl="116">116+</button>
+    <button data-lvl="130">130+</button>
+  </div>
+  <span class="count" id="count"></span>
+</div>
+
+<main>
+  <p class="section-intro">Level 1–38: Einfach questen oder bei Archons leveln lassen.</p>
+  <p class="section-intro" style="margin-top:-8px; font-weight:700; color:var(--red-bright)">Auf dem Server Kebing können Zeitangaben und %-Angaben zur Questabgabe sowie die Werte für „EP zum Up" und „EP / Quest" stark abweichen.</p>
+  <div class="scroller">
+    <table id="tbl">
+      <thead>
+        <tr>
+          <th>Lvl</th>
+          <th title="Werte können je nach Server leicht abweichen">EP zum Up</th>
+          <th>Grind-Spot / Drops</th>
+          <th>Vor-Quest</th>
+          <th title="Werte können je nach Server leicht abweichen">EP / Quest</th>
+          <th>% / Abg.</th>
+          <th>Zeit</th>
+          <th>Questort (Main / Alt)</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+
+  <div class="legend">
+    <span><i class="dot" style="background:#ff3b3b"></i>Levelzahl</span>
+    <span><i class="dot" style="background:#ff8a3d"></i>Farm-/Grindspot</span>
+    <span><i class="dot" style="background:var(--note)"></i>Hinweis-Zeile (übergreifend)</span>
+  </div>
+</main>
+</section>
+
+<section id="view-wdh" class="view" hidden>
+<main>
+  <p class="section-intro">In diesen Level-Bereichen kann die jeweilige Wiederholungs-Quest (Wdh) angenommen werden. So weißt du, ab wann du z.B. beim Grinden schon die nächste Wdh mitnehmen kannst.</p>
+  <div class="scroller">
+    <table>
+      <thead>
+        <tr><th>Level-Bereich</th><th>Wdh (Grind-Spot)</th><th>Zugehörige Quest(s)</th></tr>
+      </thead>
+      <tbody id="tbody-wdh"></tbody>
+    </table>
+  </div>
+</main>
+</section>
+
+<footer>Werte aus der Level-Guide-Tabelle &middot; Angaben ohne Gewähr</footer>
+
+<script>
+// [level, epZumUp, farm, quest, epProQuest, pct, zeit, main, alt, note]
+const rows = [
+[38,"175.104","Hacken Wdh · Drops","Große Nachfrage nach Hacken 1+2","24.400","13,9%","","Grab im Rebstock (Um E5 herum)",""],
+[39,"204.105","","","","12,0%","","",""],
+[40,"239.298","","","","10,2%","","",""],
+[41,"275.158","","","","8,9%","","",""],
+[42,"316.339","","Abg. solang % ≤ 91, um Droppi zu bleiben","","7,7%","","",""],
+[43,"363.625","Goblin Wdh","Hässliche Goblins 1+2","19.950","5,5%","","Goblinlager (G4)",""],
+[44,"417.913","Wer-Bären · Drops","Fantastische Items","16.400","3,9%","7%","Goblinlager (Um D8 herum)",""],
+[45,"480.233","","Der beste Besen 1+2+3","30.400","3,4%","6%","",""],
+[46,"551.763","","","","3,0%","6%","",""],
+[47,"633.855","","","","2,6%","5%","",""],
+[48,"728.055","","Abg. solang % ≤ 94, um Droppi zu bleiben","","2,3%","4,2%","",""],
+[49,"836.140","Questen mit Q 44–51","","","","","Goblinlager / Eingestürztes Gefängnis",""],
+[50,"954.916","","","","","","",""],
+[51,"1.093.480","","","","","","",""],
+[52,"1.239.784","King Coll Wdh · Drops","Ein spezieller Meißel","122.900","9,9%","","Schaffotplatz (H5–H7)",""],
+[53,"1.405.180","","","","8,7%","","",""],
+[54,"1.592.115","","","","7,7%","","",""],
+[55,"1.803.343","","","","6,8%","","",""],
+[56,"2.041.966","","Abg. solang % ≤ 93, um Droppi zu bleiben","","6,0%","","",""],
+[57,"2.311.478","Questen mit Q 50–60","Ü60-Quests geben mehr EP als U60 – für Skip auf Lvl 67 aufheben","","","","Schaffotplatz / Düsterer Durchgang 2 / Uruga",""],
+[58,"2.615.809","","","","","","",""],
+[59,"3.056.416","","","","","","",""],
+[60,"3.546.811","","","","","","",""],
+[61,"4.048.427","Schloss Zombie Wdh · Drops","Zweiter Turm 1+2","","20,0%","","Uruga Kristallschloss (J7)",""],
+[62,"4.612.249","","Was ich mache?","","17,6%","","",""],
+[63,"5.245.473","","Belohnung für den Dunkelkristall?! 3","810.356","15,4%","","",""],
+[64,"5.956.087","Pilzsporen · Drops","Gedächtnisverlust 1+2","587.930","9,9%","","Uruga (Um F7 herum)",""],
+[65,"6.752.967","","","","8,7%","","",""],
+[66,"7.645.958","","Abg. solang % ≤ 92, um Droppi zu bleiben","","7,7%","","",""],
+[67,"8.645.995","Übrige Quests von 50–60 sollten reichen, um direkt auf 68 zu leveln","","","","","","",""],
+[68,"9.765.204","Echsenschlamm (keine Droppis mehr nötig)","Hoffnungsvoller Mörder","780.130","8,0%","","Schlummerwald (I2)",""],
+[69,"11.017.038","","Nebenbei: Böse gewordene Bäume 1+2, Das Krallenamulett 1+2 machen","","7,1%","","",""],
+[70,"12.358.697","","","","6,3%","","","","Alternativ bei Subbis leveln lassen, ca. 1,5–2 h"],
+[71,"13.370.736","Navare","Die verrückten Navare 1+2","530.800","4,0%","","Verborgenes Gefängnis 1. Etage (Räume um B2)","","Alternativ bei Subbis leveln lassen, ca. 1,5–2 h"],
+[72,"14.438.305","","","","3,7%","","",""],
+[73,"15.558.901","","","","3,4%","","",""],
+[74,"16.728.449","Questen mit Q 71–76 + Phino KQ","","","","","","Schlummerwald / Alte Elfenwälder","Alternativ bei Subbis leveln lassen, ca. 1,5–2 h"],
+[75,"17.940.946","","","","","","",""],
+[76,"19.188.027","","","","","","",""],
+[77,"20.458.453","Echsenritter · Drops","Monstersammler 1+2","1.075.320","5,3%","","","Schlummerwald (Um G8 herum)"],
+[78,"21.737.517","","Abg. solang % ≤ 94, um Droppi zu bleiben","","4,9%","","",""],
+[79,"23.006.326","Feuernixen","Erschlagt die Feuernixe!","1.052.025","4,6%","25 min","Brennender Fels (Um B2 herum)",""],
+[80,"24.477.474","","","","4,3%","30 min","","","Alternativ Dg leveln lassen: ca. 4–5 Gruppen, 1 h → 8h+ Zeitersparnis"],
+[81,"28.529.900","Maulwürfe","Fiese miese Maulwürfe","1.325.850","4,6%","25 min","Brennender Fels (Um E7 herum)",""],
+[82,"35.131.369","","ab 82: Die schon wieder","1.721.110","4,9%","25 min","",""],
+[83,"42.540.894","","","","4,0%","30 min","",""],
+[84,"51.616.286","Kidmons","Verliebter Hans","1.301.400","2,5%","45 min","Brennender Fels (Um I7 herum)",""],
+[85,"62.813.048","","ab 85: Kidmons, die Nervensägen","1.701.400","2,7%","45 min","",""],
+[86,"76.721.653","Juwelenbaum","Ein Juwel an einen Baum","1.489.700","1,9%","60 min","Brennender Fels (Um D1 herum)",""],
+[87,"94.111.893","","ab 87: Der Weg zum Reichtum","2.098.700","2,2%","60 min","",""],
+[88,"115.992.909","","","","1,8%","85 min","",""],
+[89,"143.694.745","Gargoyles","Angriff der Lavagargoyles","1.400.196","1,0%","80 min","Sumpf der Dämmerung (Um H3 herum)",""],
+[90,"167.770.001","Steini","Meine Vorahnungen sind niemals falsch","","4,0%","25 min","Brennender Fels (E6 &amp; D7, Doppelspot)",""],
+[91,"208.502.032","","","6.710.900","3,2%","30 min","",""],
+[92,"260.560.282","","","","2,6%","35 min","",""],
+[93,"327.485.399","","","","2,0%","40 min","",""],
+[94,"316.329.410","Alraunen","Gesetzesloser im Sumpf","4.744.941","1,5%","40 min","Sumpf der Dämmerung (D8/E8)",""],
+[95,"351.715.412","","","","1,3%","45 min","",""],
+[96,"378.582.562","Rhinokönig","Die Drohungen des Rhinokönigs","5.384.000","1,4%","30 min","Sumpf der Dämmerung (F2/H2)",""],
+[97,"423.855.615","","Doppelspot","","1,3%","35 min","",""],
+[98,"439.789.639","Ping-Pig · Drops","Essendieb! (mit Droppis)","4.620.000","1,1%","40 min","Sumpf der Dämmerung (C5/C6)","","Alternativ questen"],
+[99,"440.297.783","Schnecken","Persönliche Rache","4.402.977","1,0%","70 min","Sumpf der Dämmerung (B7/B8)",""],
+[100,"444.569.344","","","","1,0%","70 min","",""],
+[101,"529.167.017","verrückte Schnecken","Verdächtiger großer Matschmensch","","1,2%","30 min","Höhle der Erinnerung, Eingang im Sumpf der Dämmerung (F1)","Sumpf der Dämmerung (B6)"],
+[102,"561.166.673","","Feuer an Hand und Fuß","","1,2%","35 min","","","Alternativ Schwarzbären, gleich schnell"],
+[103,"729.109.855","","Unlöschbares Feuer","","0,9%","40 min","",""],
+[104,"955.679.039","","Unlöschbares Feuer","6.600.000","0,7%","50 min","",""],
+[105,"1.139.461.739","Schwarzbären","Schwarzbären-Jagd","9.440.000","0,8%","65 min","Ruinen von Alberstol (G4)","","Alternativ questen"],
+[106,"1.392.625.615","Shellas","Spiel mit dem Feuer","25.092.600","1,8%","40 min","Dunkles Land (H2)","Dunkles Land (C2)"],
+[107,"1.542.989.105","","","","1,6%","40 min","",""],
+[108,"1.754.117.759","","","","1,4%","50 min","",""],
+[109,"1.995.896.443","","Questen, Ø 2,5% pro Quest · Schleimkaiser KQ","","","","Wurzel des Baums des Lebens","Dunkles Land"],
+[110,"2.293.889.830","Nepis / Nephis / Neppis / Nepilims","Tornado-Jagd","46.035.000","2,0%","25 min","Tal von Adelia (D7/D8/E7)",""],
+[111,"2.707.040.394","","Tornado-Jagd","","1,7%","30 min","",""],
+[112,"3.362.144.169","","","","1,4%","40 min","","","Alternativ Leipoons/Shellas (evtl. schneller ohne Kloppi) · Bedrohungen des Übergangslagers 1/2"],
+[113,"3.977.237.887","","","","1,2%","45 min","",""],
+[114,"4.910.552.867","","","","0,9%","55 min","",""],
+[115,"6.510.547.575","","","","0,7%","70 min","",""],
+[116,"7.563.701.284","Techniker · Schreie 2","Besondere Schraubenschlüssel","74.956.984","1,0%","40 min","Kahal-Schneefelder: Techniker (I2) / Schreie 2 (H8/H7/G8)",""],
+[117,"8.099.843.693","","Schreie 2","151.274.025","1,9%","40 min","",""],
+[118,"8.823.802.728","Mechaniker","Schrott verkaufen","200.380.404","2,3%","40 min","Arkroute (G7/G8/H8)",""],
+[119,"9.437.039.135","","","200.380.404","2,1%","45 min","",""],
+[120,"10.050.275.542","","","142.032.045","1,4%","60 min","","","Alternativ Pergys · Drops"],
+[121,"10.579.237.412","10/10","Weiterhin verdächtig","127.317.500","1,2%","70 min","Kahal-Schlucht (C8)",""],
+[122,"11.136.039.381","Holz · Drops","Ich brauche mehr Feuerholz","128.198.929","1,2%","30 min","Kahal-Schlucht (Laufspot G6/G8/I8/G3/F3/D3)","","Alternativ 10/10"],
+[123,"11.722.146.717","","","","1,1%","32 min","",""],
+[124,"12.339.101.807","","","","1,0%","35 min","","","Alternativ Megantereon"],
+[125,"13.943.185.042","Megantereons","Bedrohung durch Schluchtenmegantereons","130.505.824","0,9%","100 min","Kahal-Schneefelder / Kahal-Schlucht (G2)","","Alternativ Mandragoras + Pilze / Quests"],
+[126,"15.755.799.097","Murumuru · Drops","Schutz für das Lager","103.908.226","0,7%","25 min","Insel Eya (G6)",""],
+[127,"17.804.052.980","Pilzen · Drops","Pilze für Ursula","103.908.226","0,6%","2 h","Insel Eya (D5)","Insel Eya (B3)"],
+[128,"20.118.579.868","Holzi · Drops","Serben und sein Holz","120.812.911","0,6%","40 min","Insel Eya (Küste C2–F1)","Insel Eya (B7)"],
+[129,"22.733.995.250","","","","0,5%","45 min","",""],
+[130,"27.280.794.300","5/5","Hilfe für Yuna 1","98.265.919","0,4%","3 h","Ominöses Tal (E6/D7/D8)",""],
+[131,"32.736.953.160","","","","0,3%","3,8 h","",""],
+[132,"39.284.343.793","Lord Reißzahn","Anführer der Reißzähne","78.568.687","0,2%","3 h","Pagels Schlachtfeld (Doppelspot E7/D8)","Pagels Schlachtfeld (H4)"],
+[133,"47.141.212.550","Nodus","Hilfe für Yuna 2","129.829.931","0,3%","6 h","Ominöses Tal (F2/E3)","","Alternativ questen (Bechern geht schneller)"],
+[134,"56.569.455.061","Bechern","Hilfe für Yuna 3","402.641.913","0,7%","2,3 h","Ominöses Tal (Laufspot H2/I3/H4)","Ominöses Tal (H2)"],
+[135,"67.883.346.073","","","","0,6%","2,8 h","",""],
+[136,"81.460.015.288","Seelen Drops","Sammlung der verdorbenen Seelen","311.068.076","0,4%","2,9 h","Himlische Inseln (Auf der ganzen Insel möglich)","","Bei 40s pro Abg. (1 Pull = 1 Abg., sehr konservativ) · volle Doppeldroppi-Gruppe + Klopper"],
+[137,"97.752.018.346","","2h für Vorquest einrechnen","","0,3%","3,5 h","","",""],
+[138,"117.302.422.014","Käfer Drops","Käferplage","205.767.592","0,2%","6,3 h","Tempel der Hoffnungslosigkeit (E6/E7)","Tempel der Hoffnungslosigkeit (C2/C3)","Bei 25s pro Abg. (1 Pull = 1 Abg., sehr konservativ) · volle Droppi-Gruppe + Klopper"],
+[139,"133.333.333.111","","","","0,2%","7,2 h","",""]
+];
+
+// Gruppiere aufeinanderfolgende Level mit demselben Grind-Spot/Drops (Spalte "farm"),
+// damit sie als ein zusammenhängender Block ohne Trennlinie dargestellt werden.
+const farmGroups = [];
+let cur = null;
+rows.forEach((r,i)=>{
+  if(r[0]==="note"){ cur=null; return; }
+  const farm = r[2];
+  if(farm){ cur = {startIdx:i, length:1, farm}; farmGroups.push(cur); }
+  else if(cur){ cur.length++; }
+  else { cur = {startIdx:i, length:1, farm:''}; farmGroups.push(cur); }
+});
+const rowMeta = {};
+farmGroups.forEach(g=>{
+  for(let k=0;k<g.length;k++){
+    rowMeta[g.startIdx+k] = {isStart:k===0, span:g.length, lastInGroup:k===g.length-1, farm:g.farm};
+  }
+});
+
+// Vor-Quest-Ketten je Grind-Spot (aus den zugehörigen Tabs der Tabelle)
+const questChains = {
+  "hacken": ["Große Nachfrage nach Hacken 1","Große Nachfrage nach Hacken 2"],
+  "goblin": ["Hässliche Goblins 1","Hässliche Goblins 2"],
+  "schloss zombie": ["Zweiter Turm 1","Zweiter Turm 2","Was ich mache?","Belohnung für den Dunkelkristall 3"],
+  "steini": ["Brennende Höhle 1","Brennende Höhle 2","Meine Vorahnungen sind niemals falsch"],
+  "verrückte schnecken": ["Verdächtiger großer Matschmensch","Feuer an Hand und Fuß","Unlöschbares Feuer · Drops","Unlöschbares Feuer"],
+  "techniker": ["Millys gesunde Wundermedizin 2","Unbekannte Gründe","Schreie 1","Schreie 2","Besondere Schraubenschlüssel 1","Besondere Schraubenschlüssel 2"],
+  "mechaniker": ["Der kluge Yeti lernt für die Prüfung","Hilda ist etwas Wichtiges eingefallen","Kranke Akisha","Die dunkle Macht der Windhexe","Pagels Stimme 1","Pagels Stimme 2","Hilfe für die Einwohner","Yetis bitten Akroute um Hilfe","Eine starke Allianz","Wie mach Bera rettet","Die Abenteuer sind noch nicht da","Das gruseligste Monster","Die Geschichte von Balier und Hilda 1","Die Geschichte von Balier und Hilda 2","Die Geschichte von Balier und Hilda 3","Schrott verkaufen"],
+  "pergy": ["Keine Neuigkeiten aus dem Zwergendorf","Angsteinflößender Schluchtenpergy","Jey, Anführer der Jägerunion","Jeys Waffe","Hast du Zwerge gesehen","Der Zwerg Basilone","Jeys Anliegen","Transport im Schnee 1","Transport im Schnee 2"],
+  "10/10": ["Verlegener Basilone","Basilone verweigert die Antwort","Basilones Kollege","Einsammeln der Besitztümer 1","Einsammeln der Besitztümer 2","Einsammeln der Besitztümer 3","Ein Geschenk für Jey","Jeys Kollegen","Basilones Lügengeschichte","Verdächtiger Basilone","Weiterhin verdächtig"],
+  "holz": ["Nicolas hat das Lager verlassen","Die Schluchtenmegantereons kommen näher","Ein Bruchstück von Bijou","Jemand der die Wahrheit kennt","Abführmittel","Einer ist nicht genug","Feuerholz benötigt","Ich brauche mehr Feuerholz"],
+  "megantereons": ["Die Kraft der Henneath-Allianz wird gebraucht","Basilones Entscheidung","Bedrohung durch die Schluchtenmegantereons 1","Bedrohung durch die Schluchtenmegantereons 2"],
+  "seelen": ["Welt im Krieg","Geschichte der Überlebenden 1 + 2","Aufbruch ins Ungewisse 1 + 2 + 3","Die Reise in die Welt auf der anderen Seite 1 + 2 + 3","Die Zeit drängt","Die himmlischen Gärten","Der Kampf beginnt 1 + 2 + 3 + 4 + 5","Sammlung der verderbten Seelen"],
+  "käfer": ["Welt im Krieg","Geschichte der Überlebenden 1 + 2","Aufbruch ins Ungewisse 1 + 2 + 3","Die Reise in die Welt auf der anderen Seite 1 + 2 + 3","Die Zeit drängt","Die himmlischen Gärten","Der Kampf beginnt 1 + 2 + 3 + 4 + 5","Verderbter Abgrund 1 + 2","Heilung der Kreaturen 1 + 2 + 3 + 4","Invasion der anderen Seite 1 + 2","Das Reich der Tiere 1 + 2 + 3","Käferplage"],
+  "138 ini": ["Welt im Krieg","Geschichte der Überlebenden 1 + 2","Aufbruch ins Ungewisse 1 + 2 + 3","Die Reise in die Welt auf der anderen Seite 1 + 2 + 3","Die Zeit drängt","Die himmlischen Gärten","Der Kampf beginnt 1 + 2 + 3 + 4 + 5","Der verderbte Abgrund 1 + 2","Heilung der Kreaturen 1 + 2 + 3 + 4","Invasion der anderen Seite 1 + 2","Verderbter Abgrund 1 + 2","Das Reich der Tiere 1 + 2 + 3","Die Geister brauchen unsere Hilfe 1 + 2 + 3","Eine bessere Lichtquelle 1 + 2","Kreuzzug eines Champions 1 + 2","Die Insel in ihren alten Zustand versetzen"],
+  "doppeldroppi seelen": ["Kreuzzug eines Champions 1 + 2","Geschichte der Götter 1 + 2 + 3 (droppt Kelch für die versteckte)","Kelch der Hoffnung 1","Kelch der Hoffnung 2"],
+  "blätter": ["Welt im Krieg","Geschichte der Überlebenden 1 + 2","Aufbruch ins Ungewisse 1 + 2 + 3","Die Reise in die Welt auf der anderen Seite 1 + 2 + 3","Die Zeit drängt","Die himmlischen Gärten","Der Kampf beginnt 1 + 2 + 3 + 4 + 5","Verderbter Abgrund 1 + 2","Heilung der Kreaturen 1 + 2 + 3 + 4","Invasion der anderen Seite 1 + 2","Das Reich der Tiere 1 + 2 + 3","Infizierte Natur 1 + 2 + 3","Verfaulte Blätter (Drop-Wdh)","Wald des Lebens 1 + 2","Gartenpflege (Kill-Wdh)"],
+  "135+ map quests": [
+    "Welt im Krieg","Geschichte der Überlebenden 1 + 2","Aufbruch ins Ungewisse 1 + 2 + 3","Die Reise in die Welt auf der anderen Seite 1 + 2 + 3","Die Zeit drängt","Die himmlischen Gärten","Der Kampf beginnt 1 + 2 + 3 + 4 + 5","Der verderbte Abgrund 1 + 2","Heilung der Kreaturen 1 + 2 + 3 + 4","Invasion der anderen Seite 1 + 2","Das Reich der Tiere 1 + 2 + 3","Die Geister brauchen unsere Hilfe 1 + 2 + 3","Eine bessere Lichtquelle 1 + 2","Kreuzzug eines Champions 1 + 2","Die Geschichte der Götter 1 + 2","Die Geschichte der Götter 3",
+    {header:"Tagesquests 135–137 · Tempel der Hoffnungslosigkeit"},
+    "7 – Fortschreitende Verderbnis (Remnant)","8 – Unvorhergesehene Ereignisse (25/25/25/25)","9 – Hoffnung auf ein Heilmittel (Äste/Flügel)","8 – Eine Studie seltsamen Verhaltens 1 + 2",
+    {header:"Tagesquests 138 · Herz des verrottenden Waldes / Wald-Ini"},
+    "12 – Unbekannte Kreatur","15 – Die Verdorbenheit wächst","15 – Die Insel in ihren alten Zustand versetzen",
+    {header:"Tagesquests 139"},
+    "12 – Infizierte Natur 1 + 2","13 – Wald des Lebens 1 + 2","14 – Akademische Studien","17 – Ein Reich in Gefahr","18 – Die Ausbreitung der Verdorbenheit","19 – Apoline retten","20 – Eine unbekannte Macht kehrt zurück","21 – Biestiger Beat 1 + 2","22 – Seelensuche"
+  ]
+};
+function findChain(farmText){
+  if(!farmText) return null;
+  const t = farmText.toLowerCase();
+  for(const key in questChains){ if(t.includes(key)) return questChains[key]; }
+  return null;
+}
+function chainDetailsHtml(farmText){
+  const chain = findChain(farmText);
+  if(!chain) return '';
+  const items = chain.map(step =>
+    typeof step === 'string' ? `<li>${step}</li>` : `<li class="vq-header">${step.header}</li>`
+  ).join('');
+  return `<details class="vq"><summary>Vor-Quest-Kette</summary><ol>${items}</ol></details>`;
+}
+
+const tbody = document.getElementById('tbody');
+let dataRowCount = 0;
+
+
+rows.forEach((r,i)=>{
+  const tr = document.createElement('tr');
+  if(r[0]==="note"){
+    tr.className='banner';
+    tr.innerHTML = `<td colspan="8">${r[1]}</td>`;
+  } else {
+    dataRowCount++;
+    const [lvl,ep,farm,quest,epq,pct,zeit,main,alt,note] = r;
+    const meta = rowMeta[i];
+    tr.className = 'data' + (meta.lastInGroup ? '' : ' grouped');
+    tr.dataset.searchtext = [lvl,meta.farm,quest,main,alt,note].join(' ').toLowerCase();
+    tr.dataset.lvl = lvl;
+    const farmCell = meta.isStart
+      ? `<td class="farmcell" rowspan="${meta.span}">${farm?`<span class="tag">${farm}</span>${chainDetailsHtml(farm)}`:''}</td>`
+      : '';
+    tr.innerHTML = `
+      <td class="lvl">${lvl}</td>
+      <td class="ep">${ep||'—'}</td>
+      ${farmCell}
+      <td>${quest||''}${note?`<span class="note-inline">${note}</span>`:''}</td>
+      <td class="ep">${epq||''}</td>
+      <td class="pct">${pct||''}</td>
+      <td class="time">${zeit||''}</td>
+      <td>${main||''}${alt?`<span class="alt">Alt: ${alt}</span>`:''}</td>
+    `;
+  }
+  tbody.appendChild(tr);
+});
+
+document.getElementById('count').textContent = dataRowCount + ' Level';
+
+const search = document.getElementById('search');
+search.addEventListener('input', ()=>{
+  const q = search.value.trim().toLowerCase();
+  let shown=0;
+  document.querySelectorAll('#tbody tr.data').forEach(tr=>{
+    const match = !q || tr.dataset.searchtext.includes(q) || tr.dataset.lvl===q;
+    tr.classList.toggle('hidden', !match);
+    if(match) shown++;
+  });
+  document.querySelectorAll('#tbody tr.banner').forEach(tr=>tr.classList.toggle('hidden', !!q));
+  document.getElementById('count').textContent = shown + ' Level';
+});
+
+document.querySelectorAll('.jump button').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const lvl = btn.dataset.lvl;
+    const target = document.querySelector(`tr[data-lvl="${lvl}"]`);
+    if(target) target.scrollIntoView({behavior:'smooth', block:'center'});
+  });
+});
+
+// Wdh-Annahme-Tabelle
+const wdhRows = [
+["38 – 42","Hacken · Drops","Große Nachfrage nach Hacken 2"],
+["42 – 46","Goblins","Hässliche Goblins"],
+["44 – 48","Wer-Bären · Drops","Fantastische Items · Der beste Besen 3"],
+["52 – 56","King Coll · Drops","Ein spezieller Meißel"],
+["61 – 63","Schloss Zombie · Drops","Bedrohung für den Dunkelkristall 3"],
+["62 – 66","Pilzsporen · Drops","Gedächtnisverlust 2"],
+["68 – 71","Schlamm (Drops)","Hoffnungsvoller Mörder"],
+["71 – 73","Navare","Die verrückten Navare 2"],
+["77 – 78","Echsenritterklauen · Drops","Monstersammler 2"],
+["79 – 80","Nixen","Erschlagt die Feuernixen"],
+["81 – 83","Maulis","Fiese miese Maulwürfe · Die schon wieder"],
+["84 – 85","Kidmons","Verliebter Hans · Kidmons die Nervensägen"],
+["86 – 88","Juwis","Ein Juwel an einen Baum · Der Weg zum Reichtum"],
+["89","Gargoyle","Angriff der Lavagargoyles"],
+["90 – 93","Steini","Meine Vorahnungen sind niemals falsch"],
+["94 – 95","Alraunen","Gesetzesloser im Sumpf"],
+["96 – 97","Rhinokönig","Die Drohungen des Rhinokönigs"],
+["97 – 98","Ping-Pigs · Drops","Essensdieb"],
+["99 – 101","Schnecken","Persönliche Rache"],
+["101 – 104","verrückte Schnecken","Unlöschbares Feuer"],
+["102 – 106","Schwarzbären","Schwarzbären-Jagd"],
+["106 – 108","Shellas","Spiel mit dem Feuer"],
+["110 – 115","Nepis","Tornado-Jagd"],
+["116 – 118","Techniker / Schreie 2","Besondere Schraubenschlüssel · Schreie 2"],
+["118 – 120","Mechaniker","Schrott verkaufen"],
+["120 – 121","Pergys","Transport im Schnee"],
+["121 – 123","10/10","Weiterhin verdächtig"],
+["122 – 124","Holz","Ich brauche mehr Feuerholz"],
+["124 – 125","Megantereons","Bedrohung durch Schluchtenmegantereons"],
+["126","Murumuru","Schutz für das Lager"],
+["126 – 127","Pilze","Pilze für Ursula"],
+["128 – 129","Holzi","Serben und sein Holz"],
+["130 – 131","5/5","Hilfe für Yuna 1"],
+["132","Reißzahn","Anführer der Reißzähne"],
+["133","Golem","Frieden finden"],
+["134 – 135","Bechern","Hilfe für Yuna 3"],
+["136 – 137","Seelen","Sammlung der verderbten Seelen"],
+["138 – 139","Käfer","Käferplage"],
+["135 – 140","138 Ini","—"],
+["139","Doppeldroppi Seelen","Kelch der Hoffnung 2"],
+["139","Blätter","—"],
+["135+","135+ Map Quests","—"]
+];
+const tbodyWdh = document.getElementById('tbody-wdh');
+wdhRows.forEach(([range,farm,quest])=>{
+  const tr = document.createElement('tr');
+  tr.className='data';
+  tr.innerHTML = `<td class="lvl">${range}</td><td><span class="tag">${farm}</span>${chainDetailsHtml(farm)}</td><td>${quest}</td>`;
+  tbodyWdh.appendChild(tr);
+});
+
+// Tab-Umschaltung
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.view').forEach(v=>v.hidden=true);
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.target).hidden = false;
+  });
+});
+</script>
+</body>
+</html>
